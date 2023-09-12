@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Page</title>
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        .main {
+            display: flex;
+            justify-content: space-between; /* Align the sections side by side */
+            width: 100%; /* Set the width for both sections */
+            height: 100%; /* Set the height to occupy the full viewport height */
+        }
+        .container {
+            padding: 2rem;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            width: 50%; /* Adjust the width as needed */
+        }
+        .login-container {
+            display: none; /* Initially hide the login container */
+        }
+        .instructions {
+            flex: 1;
+            padding: 10px;
+            background-color: #f0f0f0;
+            width: 50%; /* Adjust the width as needed */
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1px;
+            border: 1px solid #ccc;
+            border-radius: 0.3rem;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Style for Register and Login buttons */
+input[type="submit"],
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-top: 10px; /* Add margin to separate buttons */
+}
+
+/* Style for Switch to Login/Register buttons */
+button[type="button"] {
+    background-color: #ccc; /* Change color for these buttons */
+    color: #000; /* Change text color for these buttons */
+}
+
+/* Style for Forgot Password link */
+#forgot-password-link a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+        .instruction-buttons {
+            display: flex;
+            flex-direction: column;
+        }
+        .instruction-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+        }
+        .instruction-buttons p {
+            display: none;
+            transition: opacity 0.3s ease-in-out;
+            color: black;
+            opacity: 0; /* Initially set opacity to 0 */
+           
+        }
+        /* Add animation keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 9;
+            }
+        }
+        /* Apply the animation to the paragraph elements */
+        .instruction-buttons p.animate {
+            animation: fadeIn 0.5s ease-in;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <h2>Registration</h2>
+            <form action="process_registration.php" method="POST">
+                <div class="form-group">
+                    <label for="full_name">Full Name:</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number:</label>
+                    <input type="text" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <input type="submit" value="Register">
+                <button onclick="toggleForms()">Switch to Login</button>
+            </form>
+        </div>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form action="process_login.php" method="POST" id="login-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+                <span id="forgot-password-link" style="display: none;">
+                    <a href="forgot_password.php">Forgot Password?</a>
+                </span>
+                <button onclick="toggleForms()">Switch to Register</button>
+            </form>
+        </div>
+
+        <div class="instructions">
+            <h2>Instructions</h2>
+            <div class="instruction-buttons">
+                <button onmouseover="toggleDescription('full_name')">Full Name</button>
+                <p id="full_name_description">Your full name as it appears on official documents.</p>
+                <button  onmouseover="toggleDescription('phone_number')">Phone Number</button>
+                <p id="phone_number_description">A valid phone number for contact.</p>
+                <button  onmouseover="toggleDescription('email')">Email</button>
+                <p id="email_description">A valid email address for communication.</p>
+                <button  onmouseover="toggleDescription('password')">Password</button>
+                <p id="password_description">A strong and secure password.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDescription(field) {
+            var descriptionElements = document.querySelectorAll('.instruction-buttons p');
+            descriptionElements.forEach(function (element) {
+                element.style.opacity = '0'; // Set opacity to 0 for all description elements
+                element.classList.remove('animate'); // Remove the 'animate' class
+            });
+            var selectedDescription = document.getElementById(field + '_description');
+            selectedDescription.style.opacity = '1'; // Set opacity to 1 for the selected description element
+            selectedDescription.classList.add('animate'); // Add the 'animate' class to trigger the animation
+        }
+        function toggleForms() {
+            var registrationForm = document.querySelector('.container');
+            var loginForm = document.querySelector('.login-container');
+
+            if (registrationForm.style.display === 'none') {
+                registrationForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            } else {
+                registrationForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }
+        }
+        
+    </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration and Login Page</title>
+    <style>
+        /* Your existing CSS styles */
+
+        .login-container {
+            display: none; /* Initially hide the login container */
+        }
+
+        /* Your existing CSS styles */
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <h2>Registration</h2>
+            <form action="process_registration.php" method="POST">
+                <!-- Registration form fields here -->
+                <input type="submit" value="Register">
+                <button onclick="toggleForms()">Switch to Login</button>
+            </form>
+        </div>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form action="process_login.php" method="POST">
+                <!-- Login form fields here -->
+                <input type="submit" value="Login">
+                <button onclick="toggleForms()">Switch to Registration</button>
+            </form>
+        </div>
+        <!-- Your instructions section remains unchanged -->
+    </div>
+
+    <script>
+        function toggleForms() {
+            var registrationForm = document.querySelector('.container');
+            var loginForm = document.querySelector('.login-container');
+
+            if (registrationForm.style.display === 'none') {
+                registrationForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            } else {
+                registrationForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+
